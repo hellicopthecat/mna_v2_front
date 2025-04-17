@@ -1,5 +1,9 @@
 "use server";
 
+import {ACCESSTOKEN} from "@/constants/constant";
+import {IAuthResponseType} from "@/types/auth/authType";
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
 import {typeToFlattenedError, z} from "zod";
 
 const loginSchema = z.object({
@@ -7,16 +11,19 @@ const loginSchema = z.object({
   password: z.string(),
 });
 interface ILoginInputError {
-  email: undefined | string[];
-  password: undefined | string[];
+  email: string[];
+  password: string[];
 }
 export interface ILoginStateType {
-  errMsg: undefined | string | typeToFlattenedError<ILoginInputError>;
+  errMsg: undefined | typeToFlattenedError<ILoginInputError>;
+  resErr: undefined | string;
 }
 export async function loginAction(
-  prevState: ILoginStateType,
+  state: ILoginStateType,
   formData: FormData
-) {
+): Promise<ILoginStateType> {
+  const cookieStore = await cookies();
+  let id: string;
   const data = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -25,9 +32,9 @@ export async function loginAction(
   try {
     const result = await loginSchema.safeParseAsync(data);
     if (!result.success) {
-      console.log("err", result.error.flatten());
       return {
         errMsg: result.error.flatten(),
+        resErr: undefined,
       };
     }
     const response = await fetch("http://localhost:4000/auth/login", {
@@ -35,12 +42,27 @@ export async function loginAction(
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(result.data),
     });
-    const uid = await response.json();
-    console.log(uid);
+    const {userId, accessToken, refreshToken} =
+      (await response.json()) as IAuthResponseType;
+    cookieStore.set(ACCESSTOKEN, accessToken + "", {
+      httpOnly: true,
+      sameSite: "strict",
+      path: "/",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+    cookieStore.set("REFRESH_TOKEN", refreshToken + "", {
+      httpOnly: true,
+      sameSite: "strict",
+      path: "/",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+    id = userId + "";
   } catch (error) {
     const err = error as Error;
     return {
-      errMsg: err.message,
+      errMsg: undefined,
+      resErr: err.message,
     };
   }
+  redirect(`/${id}`);
 }

@@ -7,6 +7,7 @@ interface IAuthInputTypes {
   inputType: HTMLInputTypeAttribute;
   placeHolder: string;
   className?: string;
+  errMsg?: string[];
 }
 export default function AuthInput({
   inputId,
@@ -15,6 +16,7 @@ export default function AuthInput({
   inputType,
   placeHolder,
   className,
+  errMsg,
 }: IAuthInputTypes) {
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -28,6 +30,7 @@ export default function AuthInput({
         placeholder={placeHolder}
         className={`px-2 py-2 rounded-md border ${className}`}
       />
+      {errMsg && errMsg.map((value, index) => <span key={index}>{value}</span>)}
     </div>
   );
 }

@@ -4,20 +4,17 @@ import Link from "next/link";
 import {joinAction} from "./actions";
 import {useActionState} from "react";
 
-const initState = {
+const initialState = {
   errMsg: undefined,
+  resMsg: undefined,
 };
 
 export default function Page() {
-  const [initialState, action, isPending] = useActionState(
-    joinAction,
-    initState
-  );
-  console.log(initialState);
+  const [state, action, isPending] = useActionState(joinAction, initialState);
+
   return (
     <form
       action={action}
-      method="POST"
       className="flex flex-col items-center gap-3 m-auto border border-[#3b99e1] p-5 rounded-lg w-96"
     >
       <h2 className="text-2xl font-bold">회원가입</h2>

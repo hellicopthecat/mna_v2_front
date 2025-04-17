@@ -1,4 +1,7 @@
 "use server";
+import {ACCESSTOKEN} from "@/constants/constant";
+import {IAuthResponseType} from "@/types/auth/authType";
+import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import {typeToFlattenedError, z} from "zod";
 
@@ -20,13 +23,16 @@ interface IJoinFieldError {
   password: string[];
   checkPass: string[];
 }
-export interface IStateProps {
-  errMsg: undefined | typeToFlattenedError<IJoinFieldError> | string;
+export interface IJoinStateType {
+  errMsg: undefined | typeToFlattenedError<IJoinFieldError>;
+  resMsg: undefined | string;
 }
 export async function joinAction(
-  state: IStateProps,
+  state: IJoinStateType,
   formData: FormData
-): Promise<IStateProps> {
+): Promise<IJoinStateType> {
+  const cookieStore = await cookies();
+  let id: string;
   const data = {
     email: formData.get("email"),
     userName: formData.get("userName"),
@@ -38,24 +44,40 @@ export async function joinAction(
   };
 
   try {
-    const schemaValidate = await joinSchema.safeParseAsync(data);
-    if (!schemaValidate.success) {
+    const result = await joinSchema.safeParseAsync(data);
+    if (!result.success) {
       return {
-        errMsg: schemaValidate.error.flatten(),
+        errMsg: result.error.flatten(),
+        resMsg: undefined,
       };
     }
     const response = await fetch("http://localhost:4000/auth/join", {
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data),
       method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(result.data),
     });
-    console.log("response", await response.json());
+    const {userId, accessToken, refreshToken} =
+      (await response.json()) as IAuthResponseType;
+    cookieStore.set(ACCESSTOKEN, accessToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+    cookieStore.set("REFRESH_TOKEN", refreshToken + "", {
+      httpOnly: true,
+      sameSite: "strict",
+      path: "/",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    id = userId + "";
   } catch (error) {
     console.log(error);
     const err = error as Error;
     return {
-      errMsg: err.message,
+      errMsg: undefined,
+      resMsg: err.message,
     };
   }
-  redirect("/");
+  redirect(`/${id}`);
 }
