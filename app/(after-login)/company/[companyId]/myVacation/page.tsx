@@ -1,12 +1,15 @@
+import MyVacationCard from "@/components/company/myVacation/MyVacationCard";
 import ListLayout from "@/components/layout/company/ListLayout";
 import {REFRESHTOKEN} from "@/constants/constant";
+import {isError} from "@/libs/utils/util";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {IVacationTypes} from "@/types/vacation/vacationType";
 import {cookies} from "next/headers";
 
 const getMyVacation = async (companyId: string) => {
   const cookie = await cookies();
   const response = await fetch(
-    `http://localhost:4000/company-workers/${companyId}/myVacation`,
+    `http://localhost:4000/company-workers-vacation/my-vacation/${companyId}`,
     {
       method: "GET",
       headers: {
@@ -16,8 +19,11 @@ const getMyVacation = async (companyId: string) => {
     }
   );
 
-  const data: IVacationTypes = await response.json();
-  return data;
+  const data = await response.json();
+  if (!response.ok) {
+    return data as IResponseErrorType;
+  }
+  return data as IVacationTypes;
 };
 export default async function Page({
   params,
@@ -26,16 +32,9 @@ export default async function Page({
 }) {
   const {companyId} = await params;
   const data = await getMyVacation(companyId);
-
   return (
     <ListLayout goBack={`/company/${companyId}`}>
-      <div>
-        {!data.id ? (
-          <p>인사담당자가 아직 휴가를 생성하지 않았습니다.</p>
-        ) : (
-          <div>{data.user.userName}</div>
-        )}
-      </div>
+      {isError(data) ? <p>{data.message}</p> : <MyVacationCard data={data} />}
     </ListLayout>
   );
 }

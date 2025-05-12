@@ -9,6 +9,7 @@ interface IInputLayoutProps extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   errMsg?: string[];
   notShow?: boolean;
+  column?: boolean;
 }
 export default function InputLayout({
   labelTxt,
@@ -19,15 +20,16 @@ export default function InputLayout({
   placeholder,
   errMsg,
   notShow = false,
+  column = true,
   ...args
 }: IInputLayoutProps) {
   return (
     <div
-      className={`flex ${inputType !== "radio" && "flex-col"} gap-2 ${
+      className={`flex ${column ? "flex-col" : "items-center"} gap-2 ${
         notShow ? "hidden" : ""
-      }`}
+      } w-full`}
     >
-      <label htmlFor={inputId} className="font-bold text-xl">
+      <label htmlFor={inputId} className="font-bold text-xl text-nowrap">
         {labelTxt}
       </label>
       <input
@@ -37,7 +39,7 @@ export default function InputLayout({
         defaultValue={value}
         placeholder={placeholder}
         {...args}
-        className="px-2 py-1 border-b border-b-blue-300"
+        className="px-2 py-1 border-b border-b-blue-300 w-full"
       />
       {errMsg &&
         errMsg.map((msg, index) => (

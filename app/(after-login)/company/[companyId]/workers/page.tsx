@@ -1,5 +1,9 @@
+import WorkerList from "@/components/company/workers/workerList/WorkerList";
 import ListLayout from "@/components/layout/company/ListLayout";
+import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
 import {REFRESHTOKEN} from "@/constants/constant";
+import {isError} from "@/libs/utils/util";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
 const getCompanyWorker = async (companyId: string) => {
@@ -14,8 +18,11 @@ const getCompanyWorker = async (companyId: string) => {
       },
     }
   );
-  const data: IUserTypes[] = await response.json();
-  return data;
+  const data = await response.json();
+  if (!response.ok) {
+    return data as IResponseErrorType;
+  }
+  return data as IUserTypes[];
 };
 export default async function Page({
   params,
@@ -24,15 +31,14 @@ export default async function Page({
 }) {
   const {companyId} = await params;
   const data = await getCompanyWorker(companyId);
-  console.log(data);
   return (
     <ListLayout goBack={`/company/${companyId}`}>
-      <ul>
-        {!data || data.length === 0 ? (
-          <li>사원이 없습니다.</li>
-        ) : (
-          <li>사원이 존재합니다.</li>
-        )}
+      <ToGoBtn
+        linkTxt={`/company/${companyId}/workers/findWorker`}
+        txt="사원찾기"
+      />
+      <ul className="flex flex-col gap-2">
+        {isError(data) ? <li>{data.message}</li> : <WorkerList data={data} />}
       </ul>
     </ListLayout>
   );

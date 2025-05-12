@@ -2,7 +2,7 @@
 
 import {useRouter} from "next/navigation";
 import ModalLayout from "../../../../layout/modalLayout/ModalLayout";
-import {ICreateAssetsParamsType} from "@/types/company/assetsParamsType";
+import {IAssetsParamsType} from "@/types/company/assetsParamsType";
 import {useActionState, useEffect, useState} from "react";
 import createInExAction, {
   ICreateInExActionState,
@@ -17,7 +17,7 @@ const initState = {
 export default function CreateInExForm({
   companyId,
   assetId,
-}: ICreateAssetsParamsType) {
+}: IAssetsParamsType) {
   //hooks
   const router = useRouter();
   const [income, setIncome] = useState(true);

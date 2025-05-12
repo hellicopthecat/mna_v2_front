@@ -18,9 +18,12 @@ const companyData = async () => {
 export default async function Page() {
   const myCompany: ICompanyTypes[] = await companyData();
   return (
-    <ul className="grid grid-cols-3 gap-3">
+    <ul className="grid grid-cols-1 gap-3 xl:mx-auto w-full">
       {myCompany.map((company) => (
-        <li key={company.id} className="bg-darkcard p-3 rounded-md">
+        <li
+          key={company.id}
+          className="bg-darkcard p-3 rounded-md overflow-hidden "
+        >
           <Link
             href={`/company/${company.id}`}
             className="flex items-center gap-3"

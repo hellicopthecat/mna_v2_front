@@ -1,5 +1,6 @@
 import {IAssetTypes} from "../asset/assetType";
 import {IProductTypes} from "../product/productType";
+import {ISalaryType} from "../salary/salaryType";
 import {IUserTypes} from "../user/userType";
 import {IVacationTypes} from "../vacation/vacationType";
 
@@ -27,5 +28,5 @@ export interface ICompanyTypes {
   companyAssets: IAssetTypes;
   companyProduct: IProductTypes[];
   workerVacation: IVacationTypes[];
-  // workerSalary: [Salary]
+  workerSalary: ISalaryType[];
 }

@@ -110,6 +110,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             inputId="incomeTrue"
             inputName="incomeTrue"
             inputType="radio"
+            column={false}
             labelTxt="수입"
             defaultChecked
             value="income"
@@ -119,6 +120,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             inputId="incomeTrue"
             inputName="incomeTrue"
             inputType="radio"
+            column={false}
             labelTxt="지출"
             value="expend"
             errMsg={[]}
@@ -129,6 +131,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             inputId="paymentsDone"
             inputName="paymentsDone"
             inputType="radio"
+            column={false}
             labelTxt="지불"
             placeholder="지불"
             defaultChecked
@@ -139,6 +142,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             inputId="paymentsDone"
             inputName="paymentsDone"
             inputType="radio"
+            column={false}
             labelTxt="비지불"
             placeholder="비지불"
             value={TPaymentsDoneType.NONPAID}
@@ -148,6 +152,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             inputId="paymentsDone"
             inputName="paymentsDone"
             inputType="radio"
+            column={false}
             labelTxt="대기"
             placeholder="대기"
             value={TPaymentsDoneType.WAIT}

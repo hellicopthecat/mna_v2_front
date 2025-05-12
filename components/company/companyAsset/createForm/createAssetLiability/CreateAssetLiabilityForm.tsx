@@ -6,7 +6,7 @@ import createAssetLiabilityAction, {
 } from "../../../../../app/(after-login)/company/[companyId]/[assetId]/create-assetliability/actions";
 import ModalLayout from "../../../../layout/modalLayout/ModalLayout";
 import {useRouter} from "next/navigation";
-import {ICreateAssetsParamsType} from "@/types/company/assetsParamsType";
+import {IAssetsParamsType} from "@/types/company/assetsParamsType";
 
 const initialState = {
   errMsg: undefined,
@@ -15,7 +15,7 @@ const initialState = {
 export default function CreateAssetLiabilityForm({
   companyId,
   assetId,
-}: ICreateAssetsParamsType) {
+}: IAssetsParamsType) {
   //hooks
   const router = useRouter();
   const [current, setCurrent] = useState(true);

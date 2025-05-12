@@ -1,4 +1,6 @@
 import {ICompanyTypes} from "../company/companyType";
+import {ISalaryType} from "../salary/salaryType";
+import {IVacationTypes} from "../vacation/vacationType";
 
 export interface IUserTypes {
   id: number;
@@ -13,6 +15,6 @@ export interface IUserTypes {
   ownedCompany: ICompanyTypes[];
   managedCompany: ICompanyTypes[];
   workAtCompany: ICompanyTypes[];
-  // salary: Salary[];
-  // vacation: Vacation[];
+  salary: ISalaryType[];
+  vacation: IVacationTypes[];
 }

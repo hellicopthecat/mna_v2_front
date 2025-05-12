@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function GoBackBtn({href}: {href: string}) {
   return (
-    <Link href={href}>
+    <Link href={href} className="size-6">
       <svg
         fill="none"
         strokeWidth={4}
