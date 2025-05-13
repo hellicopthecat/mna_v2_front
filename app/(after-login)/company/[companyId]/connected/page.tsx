@@ -1,7 +1,7 @@
+import ConnectedCompanyList from "@/components/company/connectCompany/ConnectedCompanyList";
 import ListLayout from "@/components/layout/company/ListLayout";
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
 import {REFRESHTOKEN} from "@/constants/constant";
-import {isError} from "@/libs/utils/util";
 import {ICompanyTypes} from "@/types/company/companyType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
@@ -37,15 +37,7 @@ export default async function Page({
         linkTxt={`/company/${companyId}/connected/find-company`}
         txt="회사찾기"
       />
-      <ul>
-        {isError(data) ? (
-          <li>
-            <span>{data.message}</span>
-          </li>
-        ) : (
-          data.map((company) => <li key={company.id}>{company.companyName}</li>)
-        )}
-      </ul>
+      <ConnectedCompanyList data={data} companyId={companyId} />
     </ListLayout>
   );
 }
