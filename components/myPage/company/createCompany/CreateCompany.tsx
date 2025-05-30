@@ -8,6 +8,7 @@ import {
   onClickAddressBtn,
   unMountKakaoAddress,
 } from "@/plugins/kakaoAddress";
+import Link from "next/link";
 
 interface ICompanyAddressStateProps {
   sido: string;
@@ -186,6 +187,12 @@ export default function CreateComanyForm() {
         >
           회사 생성
         </button>
+        <Link
+          href={"/my-page"}
+          className="bg-slate-500 p-2 rounded-md text-center"
+        >
+          취소
+        </Link>
       </form>
     </div>
   );

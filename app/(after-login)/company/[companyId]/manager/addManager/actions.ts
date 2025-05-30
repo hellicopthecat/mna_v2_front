@@ -1,5 +1,5 @@
 "use server";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 import {z} from "zod";
 const addManagerActionSchema = z.object({
@@ -28,14 +28,17 @@ export default async function addManagerAction(
         errMsg: "회사아이디와 등록할 사원이 아닙니다.",
       };
     }
-    const resposne = await fetch(`http://localhost:4000/company/addManager`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
-      },
-      body: JSON.stringify(result.data),
-    });
+    const resposne = await fetch(
+      `http://localhost:4000/company-manager/addManager`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
+        },
+        body: JSON.stringify(result.data),
+      }
+    );
     if (!resposne.ok) {
       return {
         ok: false,

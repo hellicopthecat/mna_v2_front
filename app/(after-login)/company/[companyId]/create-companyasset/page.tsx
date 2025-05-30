@@ -10,7 +10,7 @@ const initialState = {
 };
 export default function Page() {
   const {companyId} = useParams() as {companyId: string};
-  const [initState, action, isPending] = useActionState(
+  const [state, action, isPending] = useActionState(
     creaetCompanyAssetAction,
     initialState
   );
@@ -23,7 +23,7 @@ export default function Page() {
         inputName="budget"
         inputType="number"
         placeholder="자산"
-        errMsg={initState?.errMsg?.fieldErrors.budget}
+        errMsg={state?.errMsg?.fieldErrors.budget}
       />
       <InputLayout
         labelTxt="계좌번호"
@@ -31,7 +31,7 @@ export default function Page() {
         inputName="accountNum"
         inputType="text"
         placeholder="계좌번호"
-        errMsg={initState?.errMsg?.fieldErrors.accountNum}
+        errMsg={state?.errMsg?.fieldErrors.accountNum}
       />
       <InputLayout
         labelTxt="계좌이름"
@@ -39,7 +39,7 @@ export default function Page() {
         inputName="accountName"
         inputType="text"
         placeholder="계좌이름"
-        errMsg={initState?.errMsg?.fieldErrors.accountName}
+        errMsg={state?.errMsg?.fieldErrors.accountName}
       />
       <InputLayout
         labelTxt="계좌설명"
@@ -47,7 +47,7 @@ export default function Page() {
         inputName="accountDesc"
         inputType="text"
         placeholder="계좌설명"
-        errMsg={initState?.errMsg?.fieldErrors.accountDesc}
+        errMsg={state?.errMsg?.fieldErrors.accountDesc}
       />
       <button
         className={` w-full rounded-md py-2 ${

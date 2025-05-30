@@ -121,6 +121,7 @@ export default function CreateSalary({
                 inputType="number"
                 labelTxt="세전월급"
                 placeholder="세전월급여를 기입해주세요"
+                errMsg={state.errMsg?.fieldErrors.preTaxMonthlySalary}
               />
               <InputLayout
                 inputId="familyCount"
@@ -128,6 +129,7 @@ export default function CreateSalary({
                 inputType="number"
                 labelTxt="가족수"
                 placeholder="전체 가족수를 기입해주세요"
+                errMsg={state.errMsg?.fieldErrors.familyCount}
               />
               <InputLayout
                 inputId="childCount"
@@ -135,6 +137,7 @@ export default function CreateSalary({
                 inputType="number"
                 labelTxt="자녀수"
                 placeholder="자녀수를 기입해주세요"
+                errMsg={state.errMsg?.fieldErrors.childCount}
               />
             </div>
             <div className="flex items-center gap-2">

@@ -1,8 +1,9 @@
 import TotalInEx from "@/components/company/companyAsset/totalInEx/TotalInEx";
 import ListLayout from "@/components/layout/company/ListLayout";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IIncomeExpend} from "@/types/asset/assetType";
 import {IAssetsParamsType} from "@/types/company/assetsParamsType";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 const getTotalInEx = async (assetId: string) => {
   const cookie = await cookies();
@@ -12,12 +13,15 @@ const getTotalInEx = async (assetId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );
-  const data: IIncomeExpend[] = await response.json();
-  return data;
+  const data = await response.json();
+  if (!response.ok) {
+    return data as IResponseErrorType;
+  }
+  return data as IIncomeExpend[];
 };
 export default async function Page({
   params,
@@ -26,7 +30,6 @@ export default async function Page({
 }) {
   const {companyId, assetId} = await params;
   const data = await getTotalInEx(assetId);
-  console.log(data);
   return (
     <ListLayout goBack={`/company/${companyId}/${assetId}`}>
       <ul className="flex flex-col gap-2">

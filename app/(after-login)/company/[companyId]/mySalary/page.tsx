@@ -1,6 +1,6 @@
 import MySalaryCard from "@/components/company/mySalary/MySalaryCard";
 import ListLayout from "@/components/layout/company/ListLayout";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {isError} from "@/libs/utils/util";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {ISalaryType} from "@/types/salary/salaryType";
@@ -14,7 +14,7 @@ const getMySalary = async (companyId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );

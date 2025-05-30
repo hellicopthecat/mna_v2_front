@@ -1,5 +1,5 @@
 "use server";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {ICompanyTypes} from "@/types/company/companyType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
@@ -39,7 +39,7 @@ export default async function findCompanyAction(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
       }
     );

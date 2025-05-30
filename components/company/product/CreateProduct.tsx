@@ -6,31 +6,30 @@ import InputLayout from "@/components/layout/formLayout/inputLayout";
 import ModalLayout from "@/components/layout/modalLayout/ModalLayout";
 import {TPaymentsDoneType} from "@/types/asset/assetType";
 import {useRouter} from "next/navigation";
-import {useActionState, useEffect, useState} from "react";
+import {useActionState} from "react";
 const initialState = {
   errMsg: undefined,
   resErr: undefined,
 };
 export default function CreateProduct({companyId}: {companyId: string}) {
   const router = useRouter();
-  const [modal, setModal] = useState(false);
   const [state, action] = useActionState(
     async (prevState: ICreateProductTypes, formData: FormData) => {
-      setModal(true);
-      return await createProductAction(prevState, formData);
+      formData.set("companyId", companyId);
+      const {errMsg, resErr} = await createProductAction(prevState, formData);
+      if (!errMsg && !resErr) {
+        alert("상품생성이 완료되었습니다.");
+        router.back();
+      }
+      return {errMsg, resErr};
     },
     initialState
   );
-  useEffect(() => {
-    if (modal && !state.errMsg && !state.resErr) {
-      router.back();
-    }
-  }, [modal, state, router]);
   return (
     <ModalLayout>
       <form
         action={action}
-        className="relative z-50  flex flex-col w-full gap-2 bg-[#181a1b] border border-blue-500 p-2 rounded-md"
+        className="relative z-50  flex flex-col w-full gap-2 bg-[#181a1b] border border-blue-500 p-5 rounded-md"
       >
         <h3 className="text-3xl font-bold text-center">상품 생성</h3>
         <input type="text" name="companyId" defaultValue={companyId} hidden />
@@ -40,7 +39,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="text"
           labelTxt="거래제목"
           placeholder="거래제목"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.transactionTitle}
         />
         <InputLayout
           inputId="itemName"
@@ -48,7 +47,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="text"
           labelTxt="상품이름"
           placeholder="상품이름"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemName}
         />
         <InputLayout
           inputId="itemModelName"
@@ -56,14 +55,14 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="text"
           labelTxt="상품모델명"
           placeholder="상품모델명"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemModelName}
         />
         <InputLayout
           inputId="itemPhoto"
           inputName="itemPhoto"
           inputType="file"
           labelTxt="상품사진"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemPhoto}
         />
         <InputLayout
           inputId="itemType"
@@ -71,7 +70,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="text"
           labelTxt="상품타입"
           placeholder="상품타입"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemType}
         />
         <InputLayout
           inputId="itemCount"
@@ -79,7 +78,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="number"
           labelTxt="상품개수"
           placeholder="상품개수"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemCount}
         />
         <InputLayout
           inputId="itemPrice"
@@ -87,7 +86,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="number"
           labelTxt="가격"
           placeholder="가격"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemPrice}
         />
         <InputLayout
           inputId="itemDesc"
@@ -95,7 +94,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="text"
           labelTxt="상품설명"
           placeholder="상품설명"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.itemDesc}
         />
         <InputLayout
           inputId="paymentType"
@@ -103,9 +102,9 @@ export default function CreateProduct({companyId}: {companyId: string}) {
           inputType="text"
           labelTxt="결제수단"
           placeholder="결제수단"
-          errMsg={[]}
+          errMsg={state.errMsg?.fieldErrors.paymentType}
         />
-        <div className="flex items-center justify-around">
+        <div className="flex items-center justify-around self-center gap-10">
           <InputLayout
             inputId="incomeTrue"
             inputName="incomeTrue"
@@ -126,7 +125,7 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             errMsg={[]}
           />
         </div>
-        <div className="flex items-center justify-around">
+        <div className="flex items-center justify-around self-center gap-10">
           <InputLayout
             inputId="paymentsDone"
             inputName="paymentsDone"
@@ -159,7 +158,6 @@ export default function CreateProduct({companyId}: {companyId: string}) {
             errMsg={[]}
           />
         </div>
-
         <button className="bg-blue-500 p-2 w-full rounded-md">생성</button>
         <button
           type="button"

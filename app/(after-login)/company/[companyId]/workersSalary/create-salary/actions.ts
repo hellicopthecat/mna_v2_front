@@ -1,6 +1,6 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 import {z} from "zod";
@@ -42,7 +42,7 @@ export default async function createSalaryAction(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
         body: JSON.stringify(result.data),
       }

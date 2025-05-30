@@ -30,6 +30,7 @@ export default function AddManagerList({
       const {ok, errMsg} = await addManagerAction(initialState, formData);
       if (!ok) {
         alert(errMsg);
+        setOpen(null);
       } else {
         alert("등록되었습니다.");
         setOpen(null);
@@ -81,7 +82,7 @@ export default function AddManagerList({
                     </button>
                     <button
                       type="button"
-                      className="bg-blue-500 p-2 rounded-md w-full"
+                      className="bg-slate-500 p-2 rounded-md w-full"
                       onClick={() => setOpen(null)}
                     >
                       취소

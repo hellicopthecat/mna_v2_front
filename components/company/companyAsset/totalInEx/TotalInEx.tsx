@@ -2,14 +2,20 @@
 import {ChevronRight} from "@/components/icons/Chevron";
 import IncomeTrueBadge from "@/components/layout/badge/IncomeTrueBadge";
 import PaymentsDoneBadge from "@/components/layout/badge/PaymentsDoneBadge";
+import {isError} from "@/libs/utils/util";
 import {IIncomeExpend} from "@/types/asset/assetType";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {useState} from "react";
 
-export default function TotalInEx({data}: {data: IIncomeExpend[]}) {
+export default function TotalInEx({
+  data,
+}: {
+  data: IIncomeExpend[] | IResponseErrorType;
+}) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <>
-      {!data ? (
+      {isError(data) ? (
         <li>데이터가 존재하지 않습니다.</li>
       ) : (
         data.map((value) => (

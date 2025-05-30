@@ -1,5 +1,5 @@
 "use server";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 import {z} from "zod";
 
@@ -34,12 +34,12 @@ export default async function editVacationActions(
       };
     }
     const response = await fetch(
-      `http://localhost:4000/vacation/${prevState.vacationId}`,
+      `http://localhost:4000/vacation/edit/${prevState.vacationId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
         body: JSON.stringify(result.data),
       }

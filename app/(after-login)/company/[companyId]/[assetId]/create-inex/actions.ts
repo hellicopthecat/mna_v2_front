@@ -9,7 +9,7 @@ const createInExSchema = z.object({
   title: z
     .string({required_error: "거래제목을 작성해주세요."})
     .min(1, {message: "거래제목을 작성해주세요."}),
-  cost: z
+  cost: z.coerce
     .string({required_error: "금액을 입력해주세요."})
     .refine((val) => Number(val) > 100, {message: "100원 이상이여야합니다."}),
   businessDate: z
@@ -63,12 +63,16 @@ export default async function createInExAction(
         body: JSON.stringify(result.data),
       }
     );
-    if (resposne.ok) {
+    if (!resposne.ok) {
       return {
         errMsg: undefined,
-        resErr: undefined,
+        resErr: "지출거래생성에 실패하였습니다.",
       };
     }
+    return {
+      errMsg: undefined,
+      resErr: undefined,
+    };
   } catch (error) {
     const err = error as Error;
     return {
@@ -76,8 +80,4 @@ export default async function createInExAction(
       resErr: err.message,
     };
   }
-  return {
-    errMsg: undefined,
-    resErr: undefined,
-  };
 }

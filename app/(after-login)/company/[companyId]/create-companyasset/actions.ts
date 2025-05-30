@@ -1,19 +1,9 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
-import {typeToFlattenedError, z} from "zod";
-interface ICreateCompnayErrorType {
-  budget: string[];
-  accountNum: string[];
-  accountName: string[];
-  accountDesc: string[];
-}
-interface ICreateCompanyAssetStateType {
-  errMsg: undefined | typeToFlattenedError<ICreateCompnayErrorType>;
-  resErr: undefined | string;
-}
+import {z} from "zod";
 
 const createCompanyAssetSchema = z.object({
   budget: z.number(),
@@ -22,10 +12,14 @@ const createCompanyAssetSchema = z.object({
   accountDesc: z.string(),
 });
 
+interface ICreateCompanyAssetStateType {
+  errMsg: undefined | z.inferFlattenedErrors<typeof createCompanyAssetSchema>;
+  resErr: undefined | string;
+}
 export async function creaetCompanyAssetAction(
   prevState: ICreateCompanyAssetStateType,
   formData: FormData
-) {
+): Promise<ICreateCompanyAssetStateType> {
   const cookie = await cookies();
   const companyId = formData.get("companyId");
   const data = {
@@ -42,14 +36,25 @@ export async function creaetCompanyAssetAction(
         resErr: undefined,
       };
     }
-    await fetch(`http://localhost:4000/company-assets/${companyId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
-      },
-      body: JSON.stringify(result.data),
-    });
+    const response = await fetch(
+      `http://localhost:4000/company-assets/${companyId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
+        },
+        body: JSON.stringify(result.data),
+      }
+    );
+    if (!response.ok) {
+      return {
+        errMsg: undefined,
+        resErr: "자산을 만드는데 실패했습니다.",
+      };
+    }
+
+    redirect(`/company/${companyId}`);
   } catch (error) {
     const err = error as Error;
     return {
@@ -57,5 +62,4 @@ export async function creaetCompanyAssetAction(
       resErr: err.message,
     };
   }
-  redirect(`/company/${companyId}`);
 }

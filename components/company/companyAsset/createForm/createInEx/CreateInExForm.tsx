@@ -3,7 +3,7 @@
 import {useRouter} from "next/navigation";
 import ModalLayout from "../../../../layout/modalLayout/ModalLayout";
 import {IAssetsParamsType} from "@/types/company/assetsParamsType";
-import {useActionState, useEffect, useState} from "react";
+import {useActionState, useState} from "react";
 import createInExAction, {
   ICreateInExActionState,
 } from "@/app/(after-login)/company/[companyId]/[assetId]/create-inex/actions";
@@ -21,26 +21,24 @@ export default function CreateInExForm({
   //hooks
   const router = useRouter();
   const [income, setIncome] = useState(true);
-  const [modal, setModal] = useState(false);
   const [paymentsDone, setPaymentsDone] = useState<TPaymentsDoneType>(
     TPaymentsDoneType.WAIT
   );
   const [state, action] = useActionState(
     async (prevState: ICreateInExActionState, formData: FormData) => {
-      setModal(true);
-      return await createInExAction(prevState, formData);
+      formData.set("companyId", companyId);
+      formData.set("assetId", assetId);
+      const {errMsg, resErr} = await createInExAction(prevState, formData);
+      if (!errMsg && !resErr) {
+        alert("지출거래가 생성되었습니다.");
+        goBack();
+      }
+      return {errMsg, resErr};
     },
     initState
   );
   //fn
   const goBack = () => router.back();
-  //effect hook
-  useEffect(() => {
-    if (modal && !state.errMsg && !state.resErr) {
-      alert("지출거래가 생성되었습니다.");
-      router.back();
-    }
-  }, [state, router, modal]);
   return (
     <ModalLayout>
       <form
@@ -48,8 +46,6 @@ export default function CreateInExForm({
         className="relative z-50 w-96 flex flex-col gap-5 p-5 border border-blue-500 rounded-md bg-[#181a1b]"
       >
         <h3 className="text-3xl font-bold text-center">지출거래생성</h3>
-        <input type="text" name="companyId" defaultValue={companyId} hidden />
-        <input type="text" name="assetId" defaultValue={assetId} hidden />
         <InputLayout
           inputId="title"
           inputName="title"
@@ -61,7 +57,7 @@ export default function CreateInExForm({
         <InputLayout
           inputId="cost"
           inputName="cost"
-          inputType="string"
+          inputType="number"
           labelTxt="거래금액"
           placeholder="거래금액을 입력해주세요."
           errMsg={state.errMsg?.fieldErrors.cost}

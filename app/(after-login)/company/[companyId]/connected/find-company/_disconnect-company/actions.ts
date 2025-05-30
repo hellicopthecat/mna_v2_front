@@ -1,6 +1,6 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 
 export default async function disconnectCompanyAction(
@@ -15,7 +15,7 @@ export default async function disconnectCompanyAction(
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
         body: JSON.stringify({myCompanyId, targetCompanyId}),
       }

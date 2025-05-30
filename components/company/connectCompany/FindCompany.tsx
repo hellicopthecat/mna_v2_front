@@ -15,12 +15,12 @@ export default function FindCompany({companyId}: {companyId: string}) {
   const [companyName, setCompanyName] = useState("");
   const [errState, setErrState] = useState<string[] | null>(null);
   const [companies, setCompanies] = useState<
-    ICompanyTypes[] | IResponseErrorType | null
-  >(null);
+    ICompanyTypes[] | IResponseErrorType | undefined
+  >(undefined);
 
   const [pending, transition] = useTransition();
   useEffect(() => {
-    setCompanies(null);
+    setCompanies(undefined);
     setErrState(null);
     transition(async () => {
       const formData = new FormData();

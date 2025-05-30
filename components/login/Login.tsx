@@ -13,7 +13,7 @@ export default function Login() {
   return (
     <form
       action={action}
-      className="flex flex-col m-auto gap-3 border border-[#3b99e1] p-5 rounded-lg w-96"
+      className="m-auto flex flex-col gap-3 border border-[#3b99e1] p-5 rounded-lg w-96"
     >
       <h2 className="text-2xl font-bold">Welcome Back</h2>
       <AuthInput

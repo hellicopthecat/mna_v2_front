@@ -1,7 +1,7 @@
 import ConnectedCompanyList from "@/components/company/connectCompany/ConnectedCompanyList";
 import ListLayout from "@/components/layout/company/ListLayout";
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {ICompanyTypes} from "@/types/company/companyType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
@@ -14,7 +14,7 @@ const getConnectedCompany = async (companyId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );

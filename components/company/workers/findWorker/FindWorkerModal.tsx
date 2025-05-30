@@ -31,7 +31,7 @@ export default function FindWorkerModal({
 
   return (
     <ModalLayout>
-      <div className="z-50 w-full h-3/4 flex flex-col gap-10 bg-slate-800 p-4 rounded-md">
+      <div className="z-50 w-full h-96 flex flex-col gap-10 bg-slate-800 p-4 rounded-md">
         <form
           action={action}
           className=" flex items-center justify-between gap-3 text-nowrap bg-slate-500 p-4 rounded-md"
@@ -50,7 +50,7 @@ export default function FindWorkerModal({
           />
           <button className="bg-blue-500 p-2 rounded-md">찾기</button>
         </form>
-        <div className="w-full h-full p-4 bg-slate-500 rounded-md overflow-y-auto">
+        <div className="w-full h-96 p-4 bg-slate-500 rounded-md overflow-y-auto">
           {pending ? (
             <p>...</p>
           ) : isError(state.userData) ? (

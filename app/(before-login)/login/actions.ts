@@ -23,7 +23,7 @@ export async function loginAction(
   formData: FormData
 ): Promise<ILoginStateType> {
   const cookieStore = await cookies();
-  let id: string;
+
   const data = {
     email: formData.get("email"),
     password: formData.get("password"),
@@ -42,10 +42,10 @@ export async function loginAction(
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(result.data),
     });
-    const {userId, accessToken, refreshToken} =
+    const {accessToken, refreshToken} =
       (await response.json()) as IAuthResponseType;
     cookieStore.set(ACCESSTOKEN, accessToken + "", {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: "strict",
       path: "/",
       maxAge: 1000 * 60 * 60 * 24,
@@ -54,9 +54,8 @@ export async function loginAction(
       httpOnly: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-    id = userId + "";
   } catch (error) {
     const err = error as Error;
     return {
@@ -64,5 +63,5 @@ export async function loginAction(
       resErr: err.message,
     };
   }
-  redirect(`/${id}`);
+  redirect("/my-page");
 }

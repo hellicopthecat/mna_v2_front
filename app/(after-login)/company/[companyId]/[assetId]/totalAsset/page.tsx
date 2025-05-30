@@ -1,8 +1,9 @@
 import TotalAssetList from "@/components/company/companyAsset/totalAsset/TotalAssetList";
 import ListLayout from "@/components/layout/company/ListLayout";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IAssetLiability} from "@/types/asset/assetType";
 import {IAssetsParamsType} from "@/types/company/assetsParamsType";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 const getTotalAssets = async (assetId: string) => {
   const cookie = await cookies();
@@ -12,12 +13,15 @@ const getTotalAssets = async (assetId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );
-  const data: IAssetLiability[] = await response.json();
-  return data;
+  const data = await response.json();
+  if (!response.ok) {
+    return data as IResponseErrorType;
+  }
+  return data as IAssetLiability[];
 };
 export default async function Page({
   params,

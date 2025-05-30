@@ -47,15 +47,18 @@ export interface IAssetTypes {
   // 총 비용
   expendMoney: string;
   waitIncomeModel: IIncomeExpend[];
+  //대기입금액
   waitIncomeMoney: string;
   waitExpendModel: IIncomeExpend[];
+  //대기지출액
   waitExpendMoney: string;
   // 손익계산
   // 순이익
   netIncome: string;
   // 재무지표
   // 자기자본비율
-  equityRatio: string; // 이익률
+  equityRatio: string;
+  // 이익률
   profitMargin: string;
   // 부채비율
   debtRatio: string;

@@ -3,7 +3,7 @@ import {ACCESSTOKEN} from "@/constants/constant";
 import {IAuthResponseType} from "@/types/auth/authType";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
-import {typeToFlattenedError, z} from "zod";
+import {z} from "zod";
 
 const joinSchema = z.object({
   email: z.string().email(),
@@ -14,17 +14,9 @@ const joinSchema = z.object({
   password: z.string(),
   checkPass: z.string(),
 });
-interface IJoinFieldError {
-  email: string[];
-  userName: string[];
-  firstName: string[];
-  lastName: string[];
-  phone: string[];
-  password: string[];
-  checkPass: string[];
-}
+
 export interface IJoinStateType {
-  errMsg: undefined | typeToFlattenedError<IJoinFieldError>;
+  errMsg: undefined | z.inferFlattenedErrors<typeof joinSchema>;
   resMsg: undefined | string;
 }
 export async function joinAction(
@@ -32,7 +24,6 @@ export async function joinAction(
   formData: FormData
 ): Promise<IJoinStateType> {
   const cookieStore = await cookies();
-  let id: string;
   const data = {
     email: formData.get("email"),
     userName: formData.get("userName"),
@@ -56,10 +47,10 @@ export async function joinAction(
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(result.data),
     });
-    const {userId, accessToken, refreshToken} =
+    const {accessToken, refreshToken} =
       (await response.json()) as IAuthResponseType;
     cookieStore.set(ACCESSTOKEN, accessToken, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: "strict",
       maxAge: 1000 * 60 * 60 * 24,
     });
@@ -67,10 +58,8 @@ export async function joinAction(
       httpOnly: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-
-    id = userId + "";
   } catch (error) {
     console.log(error);
     const err = error as Error;
@@ -79,5 +68,5 @@ export async function joinAction(
       resMsg: err.message,
     };
   }
-  redirect(`/${id}`);
+  redirect("/my-page");
 }

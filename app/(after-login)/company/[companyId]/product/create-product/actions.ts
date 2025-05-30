@@ -1,6 +1,6 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 import {z} from "zod";
 
@@ -28,7 +28,7 @@ export interface ICreateProductTypes {
 export default async function createProductAction(
   prevState: ICreateProductTypes,
   formData: FormData
-) {
+): Promise<ICreateProductTypes> {
   const cookie = await cookies();
   const companyId = formData.get("companyId");
 
@@ -54,19 +54,23 @@ export default async function createProductAction(
         resErr: undefined,
       };
     }
-    console.log(result.data);
     const response = await fetch(
       `http://localhost:4000/product/create-product/${companyId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
         body: JSON.stringify(result.data),
       }
     );
-    console.log(response);
+    if (!response.ok) {
+      return {
+        errMsg: undefined,
+        resErr: "상품 생성중 오류가 발생했습니다.",
+      };
+    }
     return {
       errMsg: undefined,
       resErr: undefined,

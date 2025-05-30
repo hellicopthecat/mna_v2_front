@@ -1,6 +1,6 @@
 "use client";
 import InputLayout from "@/components/layout/formLayout/inputLayout";
-import {useActionState, useEffect, useState} from "react";
+import {useActionState, useState} from "react";
 import createAssetLiabilityAction, {
   ICreateAssetLiabilityTypes,
 } from "../../../../../app/(after-login)/company/[companyId]/[assetId]/create-assetliability/actions";
@@ -20,23 +20,25 @@ export default function CreateAssetLiabilityForm({
   const router = useRouter();
   const [current, setCurrent] = useState(true);
   const [assetLiability, setAssetLiability] = useState(true);
-  const [modal, setModal] = useState(false);
   const [state, action, pending] = useActionState(
     async (prevState: ICreateAssetLiabilityTypes, formData: FormData) => {
-      setModal(true);
-      return await createAssetLiabilityAction(prevState, formData);
+      formData.set("companyId", companyId);
+      formData.set("assetId", assetId);
+      const {errMsg, resErr} = await createAssetLiabilityAction(
+        prevState,
+        formData
+      );
+      if (!errMsg && !resErr) {
+        alert("자산부채모델이 생성되었습니다.");
+        goBack();
+      }
+      return {errMsg, resErr};
     },
     initialState
   );
   //fn
   const goBack = () => router.back();
-  //effeck hook
-  useEffect(() => {
-    if (modal && !state.errMsg && !state.resErr) {
-      alert("자산부채모델이 생성되었습니다.");
-      router.back();
-    }
-  }, [state, router, modal]);
+
   return (
     <ModalLayout>
       <form
@@ -44,8 +46,6 @@ export default function CreateAssetLiabilityForm({
         className="relative z-50 w-96 flex flex-col gap-5 p-5 border border-blue-500 rounded-md bg-[#181a1b]"
       >
         <h3 className="text-3xl font-bold text-center">재산 생성</h3>
-        <input type="text" name="companyId" defaultValue={companyId} hidden />
-        <input type="text" name="assetId" defaultValue={assetId} hidden />
         <div className="flex justify-around items-center">
           <div>
             <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function CreateAssetLiabilityForm({
         <InputLayout
           inputId="assetValue"
           inputName="assetValue"
-          inputType="text"
+          inputType="number"
           labelTxt="자산값"
           placeholder="자산값"
           errMsg={state.errMsg?.fieldErrors.assetValue}

@@ -1,7 +1,7 @@
 import ManagerList from "@/components/company/manager/ManagerList";
 import ListLayout from "@/components/layout/company/ListLayout";
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
@@ -9,12 +9,12 @@ import {cookies} from "next/headers";
 const getCompanyManager = async (companyId: string) => {
   const cookie = await cookies();
   const response = await fetch(
-    `http://localhost:4000/company/manager/${companyId}`,
+    `http://localhost:4000/company-manager/${companyId}`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );

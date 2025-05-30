@@ -26,7 +26,7 @@ export default function WorkerListLayout({
         data.map((val) => (
           <li
             key={val.id}
-            className="odd:bg-slate-500 even:bg-slate-600 p-3 rounded-md "
+            className="odd:bg-slate-500 even:bg-slate-600 p-3 rounded-md shadow-[3px_3px_4px] shadow-slate-800"
           >
             <button
               onClick={() => {

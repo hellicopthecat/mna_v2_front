@@ -13,28 +13,28 @@ export default function FindCompanyList({
   companies,
 }: {
   myCompanyId: string;
-  companies: ICompanyTypes[] | IResponseErrorType | null;
+  companies: ICompanyTypes[] | IResponseErrorType | undefined;
 }) {
   const [like, setLike] = useState<number[] | null>(null);
   const onClick = async (id: number) => {
     const find = like?.some((val) => val === id);
     if (!find) {
+      setLike((prev) => (prev ? [...prev, id] : [id]));
       const {ok, msg} = await connectCompanyAction(myCompanyId, id + "");
       if (ok) {
         alert(msg);
       } else {
         alert(msg);
       }
-      setLike((prev) => (prev ? [...prev, id] : [id]));
     }
     if (find) {
+      setLike((prev) => (prev ? prev.filter((val) => val !== id) : []));
       const {ok, msg} = await disconnectCompanyAction(myCompanyId, id + "");
       if (ok) {
         alert(msg);
       } else {
         alert(msg);
       }
-      setLike((prev) => (prev ? prev.filter((val) => val !== id) : []));
     }
   };
 

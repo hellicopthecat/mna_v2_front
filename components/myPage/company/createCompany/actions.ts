@@ -1,9 +1,9 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
-import {typeToFlattenedError, z} from "zod";
+import {z} from "zod";
 
 const createCompanySchema = z.object({
   companyName: z
@@ -28,22 +28,8 @@ const createCompanySchema = z.object({
   bname2: z.string(),
   jibunAddress: z.string(),
 });
-interface ICreateCompanyErrorType {
-  companyName: string[];
-  companyLogo: string[];
-  zonecode: string[];
-  sido: string[];
-  sigungu: string[];
-  roadname: string[];
-  roadAddress: string[];
-  restAddress: string[];
-  bname: string[];
-  bname1: string[];
-  bname2: string[];
-  jibunAddress: string[];
-}
 interface ICreateCompanyStateType {
-  errMsg: undefined | typeToFlattenedError<ICreateCompanyErrorType>;
+  errMsg: undefined | z.inferFlattenedErrors<typeof createCompanySchema>;
   resErr: undefined | string;
 }
 
@@ -51,7 +37,6 @@ export default async function createCompany(
   prevState: ICreateCompanyStateType,
   formData: FormData
 ): Promise<ICreateCompanyStateType> {
-  let id: string;
   const cookieStore = await cookies();
   const data = {
     companyName: formData.get("companyName"),
@@ -79,7 +64,7 @@ export default async function createCompany(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookieStore.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookieStore.get(ACCESSTOKEN)?.value}`,
       },
       body: JSON.stringify({...result.data, companyLogo: "hoho"}),
     });
@@ -89,8 +74,6 @@ export default async function createCompany(
         resErr: "회사생성에 실패했습니다.",
       };
     }
-    const {userId} = (await response.json()) as {userId: string};
-    id = userId;
   } catch (error) {
     const err = error as Error;
     return {
@@ -98,5 +81,5 @@ export default async function createCompany(
       resErr: err.message,
     };
   }
-  redirect(`/${id}`);
+  redirect(`/my-page`);
 }

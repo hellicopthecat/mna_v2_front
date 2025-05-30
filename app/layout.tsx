@@ -3,7 +3,7 @@ import {Geist, Geist_Mono} from "next/font/google";
 import "./globals.css";
 import GlobalNavition from "@/components/layout/navigation/GlobalNavigtion";
 import {cookies} from "next/headers";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,24 +26,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookie = await cookies();
-  // const token = cookie.get(ACCESSTOKEN)?.value;
-  const response = await fetch(`http://localhost:4000/auth/myprofile`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
-    },
-  });
-
-  const {id} = (await response.json()) as {id: string};
-
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-dvh`}
       >
-        <GlobalNavition id={Boolean(id)} />
-        <main className="flex p-5 h-full">{children}</main>
+        <GlobalNavition token={cookie.get(ACCESSTOKEN)?.value} />
+        <main className="flex flex-col p-5 h-full">{children}</main>
       </body>
     </html>
   );

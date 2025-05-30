@@ -1,6 +1,6 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {cookies} from "next/headers";
 import {z} from "zod";
 
@@ -16,10 +16,9 @@ const createAssetLiabilitySchema = z.object({
   assetLiabilityDesc: z
     .string({required_error: "값을 입력해주세요."})
     .min(1, {message: "값을 입력해주세요."}),
-  assetValue: z
+  assetValue: z.coerce
     .string({required_error: "값을 입력해주세요."})
-    .min(1, {message: "값을 입력해주세요."})
-    .refine((val) => !typeof Number(val), {message: "숫자만 입력가능합니다."}),
+    .min(1, {message: "값을 입력해주세요."}),
 });
 export interface ICreateAssetLiabilityTypes {
   errMsg: undefined | z.inferFlattenedErrors<typeof createAssetLiabilitySchema>;
@@ -50,23 +49,28 @@ export default async function createAssetLiabilityAction(
         resErr: undefined,
       };
     }
+    console.log(ids);
     const response = await fetch(
       `http://localhost:4000/assets-liabilities/${ids.assetId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
         body: JSON.stringify(result.data),
       }
     );
-    if (response.ok) {
+    if (!response.ok) {
       return {
         errMsg: undefined,
-        resErr: undefined,
+        resErr: "자산부채모델 생성에 실패했습니다.",
       };
     }
+    return {
+      errMsg: undefined,
+      resErr: undefined,
+    };
   } catch (error) {
     const err = error as Error;
     return {
@@ -74,8 +78,4 @@ export default async function createAssetLiabilityAction(
       resErr: err.message,
     };
   }
-  return {
-    errMsg: undefined,
-    resErr: undefined,
-  };
 }

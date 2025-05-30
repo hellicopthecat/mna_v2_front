@@ -1,5 +1,5 @@
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {ICompanyTypes} from "@/types/company/companyType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
@@ -10,7 +10,7 @@ const getMyCompany = async (companyId: string) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+      authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
     },
   });
   return await company.json();
@@ -22,7 +22,7 @@ const getMyId = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+      authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
     },
   });
   return await user.json();

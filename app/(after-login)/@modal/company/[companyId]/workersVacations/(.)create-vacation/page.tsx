@@ -1,5 +1,5 @@
 import CreateVacation from "@/components/company/workersVacations/CreateVacation";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
@@ -12,7 +12,7 @@ const getWorkers = async (companyId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );

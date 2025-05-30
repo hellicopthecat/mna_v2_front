@@ -2,15 +2,21 @@
 import {ChevronRight} from "@/components/icons/Chevron";
 import IncomeTrueBadge from "@/components/layout/badge/IncomeTrueBadge";
 import PaymentsDoneBadge from "@/components/layout/badge/PaymentsDoneBadge";
+import {isError} from "@/libs/utils/util";
 import {IProductTypes} from "@/types/product/productType";
+import {IResponseErrorType} from "@/types/response/responseType";
 import Image from "next/image";
 import {useState} from "react";
 
-export default function ProductCard({data}: {data: IProductTypes[]}) {
+export default function ProductCard({
+  data,
+}: {
+  data: IProductTypes[] | IResponseErrorType;
+}) {
   const [open, setOpen] = useState<number | null>(null);
   return (
     <>
-      {!data ? (
+      {isError(data) ? (
         <li>데이터가 없습니다.</li>
       ) : (
         data.map((val) => (

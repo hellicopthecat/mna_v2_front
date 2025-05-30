@@ -1,17 +1,17 @@
 import AddManagerList from "@/components/company/manager/addManager/AddManagerList";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
 const getCompanyWorker = async (companyId: string) => {
   const cookie = await cookies();
   const response = await fetch(
-    `http://localhost:4000/company/exceptManager/${companyId}`,
+    `http://localhost:4000/company-manager/exceptManager/${companyId}`,
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );

@@ -1,6 +1,6 @@
 "use server";
 
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
@@ -39,7 +39,7 @@ export default async function findWorkerModal(
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+          authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
         },
       }
     );

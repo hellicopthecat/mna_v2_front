@@ -14,17 +14,18 @@ export default function FindWorkerCard({
   token: string;
 }) {
   const router = useRouter();
-  const addWorker = async (userId: string) => {
+  const addWorker = async (workerId: string) => {
     const ok = confirm("사원등록을 하시겠습니까?");
     if (ok) {
       const response = await fetch(
-        `http://localhost:4000/company-workers/${companyId}/${userId}`,
+        `http://localhost:4000/company-workers/regist`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({companyId, workerId}),
         }
       );
       if (!response.ok) {

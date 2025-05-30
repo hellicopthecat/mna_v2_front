@@ -24,6 +24,7 @@ export default function Page() {
         labelTxt="이메일"
         inputType="email"
         placeHolder="이메일을 입력해주세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <AuthInput
         inputId="userName"
@@ -31,6 +32,7 @@ export default function Page() {
         labelTxt="유저이름"
         inputType="text"
         placeHolder="유저명을 입력하세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <AuthInput
         inputId="firstName"
@@ -38,6 +40,7 @@ export default function Page() {
         labelTxt="이름(성)"
         inputType="text"
         placeHolder="이름(성)을 입력해주세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <AuthInput
         inputId="lastName"
@@ -45,6 +48,7 @@ export default function Page() {
         labelTxt="이름"
         inputType="text"
         placeHolder="이름을 입력해주세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <AuthInput
         inputId="phone"
@@ -52,6 +56,7 @@ export default function Page() {
         labelTxt="전화번호"
         inputType="text"
         placeHolder="전화번호를 입력해주세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <AuthInput
         inputId="password"
@@ -59,6 +64,7 @@ export default function Page() {
         labelTxt="비밀번호"
         inputType="password"
         placeHolder="비밀번호를 입력해주세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <AuthInput
         inputId="checkPass"
@@ -66,6 +72,7 @@ export default function Page() {
         labelTxt="2차비밀번호"
         inputType="password"
         placeHolder="2차비밀번호를 입력해주세요"
+        errMsg={state.errMsg?.fieldErrors.email}
       />
       <button
         className={` w-full rounded-md py-2 ${

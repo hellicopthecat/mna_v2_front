@@ -1,13 +1,19 @@
 "use client";
 import {ChevronRight} from "@/components/icons/Chevron";
+import {isError} from "@/libs/utils/util";
 import {IAssetLiability} from "@/types/asset/assetType";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {useState} from "react";
 
-export default function TotalAssetList({data}: {data: IAssetLiability[]}) {
+export default function TotalAssetList({
+  data,
+}: {
+  data: IAssetLiability[] | IResponseErrorType;
+}) {
   const [open, setOpen] = useState<null | number>(null);
   return (
     <>
-      {!data ? (
+      {isError(data) ? (
         <li>데이터가 존재하지 않습니다.</li>
       ) : (
         data.map((value) => (

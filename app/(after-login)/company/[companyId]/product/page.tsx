@@ -1,8 +1,9 @@
 import ProductCard from "@/components/company/product/ProductCard";
 import ListLayout from "@/components/layout/company/ListLayout";
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
-import {REFRESHTOKEN} from "@/constants/constant";
+import {ACCESSTOKEN} from "@/constants/constant";
 import {IProductTypes} from "@/types/product/productType";
+import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 
 const getCompanyProducts = async (companyId: string) => {
@@ -13,12 +14,15 @@ const getCompanyProducts = async (companyId: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
       },
     }
   );
-  const data: IProductTypes[] = await response.json();
-  return data;
+  const data = await response.json();
+  if (!response.ok) {
+    return data as IResponseErrorType;
+  }
+  return data as IProductTypes[];
 };
 export default async function Page({
   params,
