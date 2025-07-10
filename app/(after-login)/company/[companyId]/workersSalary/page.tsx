@@ -25,6 +25,21 @@ const getWorkersSalary = async (companyId: string) => {
   }
   return data as ISalaryType[];
 };
+const isManager = async (companyId: string) => {
+  const cookie = await cookies();
+  const response = await fetch(
+    `http://localhost:4000/company-manager/isManager/${companyId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data as boolean;
+};
 export default async function Page({
   params,
 }: {
@@ -32,17 +47,27 @@ export default async function Page({
 }) {
   const {companyId} = await params;
   const data = await getWorkersSalary(companyId);
+  const manager = await isManager(companyId);
+
   return (
     <ListLayout goBack={`/company/${companyId}`}>
-      <ToGoBtn
-        linkTxt={`/company/${companyId}/workersSalary/create-salary`}
-        txt="급여 생성 하기"
-      />
+      {manager && (
+        <ToGoBtn
+          linkTxt={`/company/${companyId}/workersSalary/create-salary`}
+          txt="급여 생성 하기"
+        />
+      )}
       <ul className="flex flex-col gap-2 fadeInCard">
         {isError(data) ? (
           <p>{data.message}</p>
         ) : (
-          data.map((val) => <WorkersSalaryListCard key={val.id} data={val} />)
+          data.map((val) => (
+            <WorkersSalaryListCard
+              key={val.id}
+              data={val}
+              isManager={manager}
+            />
+          ))
         )}
       </ul>
     </ListLayout>

@@ -42,19 +42,27 @@ export async function loginAction(
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(result.data),
     });
+    if (!response.ok) {
+      return {
+        errMsg: undefined,
+        resErr: await response.json(),
+      };
+    }
     const {accessToken, refreshToken} =
       (await response.json()) as IAuthResponseType;
     cookieStore.set(ACCESSTOKEN, accessToken + "", {
       httpOnly: false,
       sameSite: "strict",
       path: "/",
-      maxAge: 1000 * 60 * 60 * 24,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      maxAge: 60 * 60 * 24,
     });
     cookieStore.set("REFRESH_TOKEN", refreshToken + "", {
       httpOnly: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      maxAge: 60 * 60 * 24 * 7,
     });
   } catch (error) {
     const err = error as Error;

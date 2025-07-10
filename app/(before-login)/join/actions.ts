@@ -52,13 +52,15 @@ export async function joinAction(
     cookieStore.set(ACCESSTOKEN, accessToken, {
       httpOnly: false,
       sameSite: "strict",
-      maxAge: 1000 * 60 * 60 * 24,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      maxAge: 60 * 60 * 24,
     });
     cookieStore.set("REFRESH_TOKEN", refreshToken + "", {
       httpOnly: true,
       sameSite: "strict",
       path: "/",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      maxAge: 60 * 60 * 24,
     });
   } catch (error) {
     console.log(error);

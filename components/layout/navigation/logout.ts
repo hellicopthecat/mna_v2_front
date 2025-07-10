@@ -10,7 +10,7 @@ export const logOutBtn = async () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      authorization: `Bearer ${cookie.get(REFRESHTOKEN)?.value}`,
+      authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
     },
   });
   if (!logoutResponse.ok) {

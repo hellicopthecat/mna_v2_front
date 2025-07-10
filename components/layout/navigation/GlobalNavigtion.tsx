@@ -2,7 +2,13 @@
 import Link from "next/link";
 import {logOutBtn} from "./logout";
 
-export default function GlobalNavition({token}: {token: string | undefined}) {
+export default function GlobalNavition({
+  token,
+  userId,
+}: {
+  token: string | undefined;
+  userId: string;
+}) {
   return (
     <nav className="w-full flex justify-between items-center p-5">
       <Link href="/" className="size-10 bg-red-500 rounded-full"></Link>
@@ -25,7 +31,7 @@ export default function GlobalNavition({token}: {token: string | undefined}) {
           <>
             <li className="flex items-center gap-2">
               <div className="bg-fuchsia-500 p-2 rounded-full size-5" />
-              <Link href={`/my-page`}>내 프로필</Link>
+              <Link href={`/my-page`}>{userId}</Link>
             </li>
             <li className="bg-mainblue">
               <button onClick={() => logOutBtn()} className="cursor-pointer">

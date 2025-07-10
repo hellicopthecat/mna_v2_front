@@ -9,7 +9,6 @@ const userData = async () => {
   const cookie = await cookies();
   const user = await fetch(`http://localhost:4000/auth/myprofile`, {
     method: "GET",
-    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,

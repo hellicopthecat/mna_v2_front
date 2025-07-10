@@ -2,9 +2,17 @@
 import {ISalaryType} from "@/types/salary/salaryType";
 import WorkersSalaryInfo from "./WorkersSalaryInfo";
 import {useState} from "react";
+import EditSalary from "./EditSalary";
 
-export default function WorkersSalaryListCard({data}: {data: ISalaryType}) {
+export default function WorkersSalaryListCard({
+  data,
+  isManager,
+}: {
+  data: ISalaryType;
+  isManager: boolean;
+}) {
   const [open, setOpen] = useState(false);
+  const [modal, setModal] = useState(false);
   return (
     <li
       className={`group odd:bg-blue-950 even:bg-teal-950 p-2 rounded-md flex flex-col gap-3 ${
@@ -23,6 +31,17 @@ export default function WorkersSalaryListCard({data}: {data: ISalaryType}) {
         </button>
       </div>
       <WorkersSalaryInfo data={data} open={open} />
+      {isManager && (
+        <>
+          <button
+            onClick={() => setModal(true)}
+            className="bg-indigo-800 py-2 rounded-md text-center"
+          >
+            편집
+          </button>
+          {modal && <EditSalary data={data} goBack={setModal} />}
+        </>
+      )}
     </li>
   );
 }

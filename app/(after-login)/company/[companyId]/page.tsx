@@ -38,9 +38,12 @@ export default async function Page({
   const user: IUserTypes = await getMyId();
   return (
     <section className="flex flex-col gap-5 w-full">
-      <div className="flex justify-between items-end">
-        <h2 className="font-bold text-3xl">{data.companyName}</h2>
-        <p className="flex items-center gap-3">
+      <div className="flex justify-between">
+        <div>
+          <h2 className="font-bold text-3xl">{data.companyName}</h2>
+          <small>CEO : {data.companyOwner.userName}</small>
+        </div>
+        <p className="flex flex-col items-end">
           <span>{data.roadAddress}</span>
           <span>
             {data.restAddress}({data.zonecode})
