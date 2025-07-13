@@ -1,4 +1,5 @@
 import CreateAssets from "@/components/company/companyAsset/CreateAssets";
+import BarChart from "@/components/company/companyAsset/graph/BarChart";
 import Doughnut from "@/components/company/companyAsset/graph/Doughnut";
 import GoBackBtn from "@/components/layout/navigation/GoBackBtn";
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
@@ -6,7 +7,7 @@ import {ACCESSTOKEN} from "@/constants/constant";
 import {isError} from "@/libs/utils/util";
 import {IAssetTypes} from "@/types/asset/assetType";
 import {IAssetsParamsType} from "@/types/company/assetsParamsType";
-import {IDoughnutProps} from "@/types/graph/graphTypes";
+import {IBarProps, IDoughnutProps} from "@/types/graph/graphTypes";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 
@@ -40,7 +41,7 @@ export default async function Page({
       wholeValue: {
         name: "총 자산",
         value: +data.totalAssets + +data.netAssets,
-        color: "red",
+        color: "#1d1e4a",
       },
       innerValue: [
         {
@@ -56,13 +57,37 @@ export default async function Page({
       ],
     };
   };
+  const barData = (data: IAssetTypes): IBarProps => {
+    return {
+      currentAssets: {
+        name: "유동자산",
+        value: +data.currentAssets,
+        color: "",
+      },
+      nonCurrentAssets: {
+        name: "부동자산",
+        value: +data.nonCurrentAssets,
+        color: "",
+      },
+      currentLiabilities: {
+        name: "유동부채",
+        value: +data.currentLiabilities,
+        color: "",
+      },
+      nonCurrentLiabilities: {
+        name: "부동부채",
+        value: +data.nonCurrentLiabilities,
+        color: "",
+      },
+    };
+  };
   return (
     <div className="flex flex-col gap-3 w-full">
       <div className="flex justify-between items-center">
         <GoBackBtn href={`/company/${companyId}`} />
         <CreateAssets companyId={companyId} assetId={assetId} />
       </div>
-      <section className="flex flex-col gap-2">
+      <section className="flex flex-col gap-6">
         {isError(data) ? (
           <div>
             <p>데이터를 불러오는데 실패하였습니다.</p>
@@ -93,9 +118,14 @@ export default async function Page({
                 />
               </li>
             </ul>
-            <div>
-              <Doughnut data={doughnutData(data)} />
-            </div>
+            <ul className="flex flex-col gap-3 *:lg:w-[50%]">
+              <li className="">
+                <Doughnut data={doughnutData(data)} />
+              </li>
+              <li className="">
+                <BarChart data={barData(data)} />
+              </li>
+            </ul>
           </>
         )}
       </section>
