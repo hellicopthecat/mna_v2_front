@@ -6,13 +6,17 @@ import {isError} from "@/libs/utils/util";
 import {IIncomeExpend} from "@/types/asset/assetType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {useState} from "react";
+import EditInEx from "./editInEx/EditInEx";
 
 export default function TotalInEx({
   data,
+  isManager,
 }: {
   data: IIncomeExpend[] | IResponseErrorType;
+  isManager: boolean;
 }) {
   const [open, setOpen] = useState<number | null>(null);
+  const [modal, setModal] = useState<number | null>(null);
   return (
     <>
       {isError(data) ? (
@@ -59,6 +63,19 @@ export default function TotalInEx({
                 <p>{value.businessDesc}</p>
               </div>
             </div>
+            {isManager && (
+              <button
+                onClick={() => setModal(value.id)}
+                className="bg-indigo-900 p-2 rounded-md cursor-pointer"
+              >
+                편집
+              </button>
+            )}
+            {modal === value.id && isManager && (
+              <div>
+                <EditInEx goBack={setModal} data={value} />
+              </div>
+            )}
           </li>
         ))
       )}

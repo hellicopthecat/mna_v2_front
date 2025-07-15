@@ -43,13 +43,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col h-dvh`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col gap-5 min-h-dvh p-5`}
       >
         <GlobalNavition
           token={cookie.get(ACCESSTOKEN)?.value}
           userId={user.userName}
         />
-        <main className="flex flex-col p-5 h-full">{children}</main>
+        <main className="flex flex-col flex-1">{children}</main>
       </body>
     </html>
   );

@@ -14,3 +14,8 @@ export interface IBarProps {
   currentLiabilities: IChartDataProps;
   nonCurrentLiabilities: IChartDataProps;
 }
+
+export interface IChartLibraryDataProps {
+  series: ApexAxisChartSeries | ApexNonAxisChartSeries | undefined;
+  options: ApexCharts.ApexOptions | undefined;
+}

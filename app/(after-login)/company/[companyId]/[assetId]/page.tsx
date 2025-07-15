@@ -1,13 +1,18 @@
 import CreateAssets from "@/components/company/companyAsset/CreateAssets";
 import BarChart from "@/components/company/companyAsset/graph/BarChart";
 import Doughnut from "@/components/company/companyAsset/graph/Doughnut";
+import GaugeChart from "@/components/company/companyAsset/graph/GaugeChart";
 import GoBackBtn from "@/components/layout/navigation/GoBackBtn";
 import ToGoBtn from "@/components/layout/navigation/ToGoBtn";
 import {ACCESSTOKEN} from "@/constants/constant";
 import {isError} from "@/libs/utils/util";
 import {IAssetTypes} from "@/types/asset/assetType";
 import {IAssetsParamsType} from "@/types/company/assetsParamsType";
-import {IBarProps, IDoughnutProps} from "@/types/graph/graphTypes";
+import {
+  IBarProps,
+  IChartLibraryDataProps,
+  IDoughnutProps,
+} from "@/types/graph/graphTypes";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 
@@ -57,6 +62,7 @@ export default async function Page({
       ],
     };
   };
+
   const barData = (data: IAssetTypes): IBarProps => {
     return {
       currentAssets: {
@@ -78,6 +84,34 @@ export default async function Page({
         name: "부동부채",
         value: +data.nonCurrentLiabilities,
         color: "",
+      },
+    };
+  };
+
+  const gaugeData = (data: IAssetTypes): IChartLibraryDataProps => {
+    return {
+      series: [
+        +data.equityRatio,
+        +data.profitMargin,
+        +data.debtRatio,
+        +data.roe,
+      ],
+      options: {
+        chart: {
+          height: 100,
+          type: "radialBar",
+        },
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {fontSize: "22px"},
+              value: {fontSize: "16px"},
+              total: {show: true, label: "Total", color: "#eee"},
+            },
+            track: {background: "#7b7b7b"},
+          },
+        },
+        labels: ["자기자본비율", "이익률", "부채비율", "자기자본이익률"],
       },
     };
   };
@@ -124,6 +158,15 @@ export default async function Page({
               </li>
               <li className="">
                 <BarChart data={barData(data)} />
+              </li>
+              <li className="">
+                <GaugeChart {...gaugeData(data)} />
+                <div className="grid grid-cols-2 gap-1 text-nowrap">
+                  <small>자기자본비율 : {data.equityRatio}%</small>
+                  <small>이익률 : {data.profitMargin}%</small>
+                  <small>부채비율 : {data.debtRatio}%</small>
+                  <small>자기자본이익률 : {data.roe}%</small>
+                </div>
               </li>
             </ul>
           </>
