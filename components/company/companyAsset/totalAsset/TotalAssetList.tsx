@@ -4,13 +4,18 @@ import {isError} from "@/libs/utils/util";
 import {IAssetLiability} from "@/types/asset/assetType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {useState} from "react";
+import EditBtn from "../btnComp/EditBtn";
+import EditAsset from "./editAsset/EditAsset";
 
 export default function TotalAssetList({
   data,
+  isManager,
 }: {
   data: IAssetLiability[] | IResponseErrorType;
+  isManager: boolean;
 }) {
   const [open, setOpen] = useState<null | number>(null);
+  const [modal, setModal] = useState<null | number>(null);
   return (
     <>
       {isError(data) ? (
@@ -42,7 +47,7 @@ export default function TotalAssetList({
             </div>
             <div className="flex flex-col gap-1 items-end">
               <small>{value.assetLiabilityType}</small>
-              <h4>{value.assetValue}</h4>
+              <h4>{value.assetValue.toLocaleString()} 원</h4>
             </div>
             <div className="p-2 **:transition **:ease-in-out **:duration-300">
               <button
@@ -64,6 +69,13 @@ export default function TotalAssetList({
                 {value.assetLiabilityDesc}
               </p>
             </div>
+            {isManager && (
+              <div className="flex gap-2 *:w-full *:cursor-pointer *:p-2 *:rounded-md">
+                <EditBtn id={value.id} fn={setModal} />
+                <button>삭제</button>
+              </div>
+            )}
+            {modal === value.id && isManager && <EditAsset goBack={setModal} />}
           </li>
         ))
       )}

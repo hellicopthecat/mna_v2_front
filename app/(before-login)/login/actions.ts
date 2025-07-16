@@ -51,7 +51,7 @@ export async function loginAction(
     const {accessToken, refreshToken} =
       (await response.json()) as IAuthResponseType;
     cookieStore.set(ACCESSTOKEN, accessToken + "", {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "strict",
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),

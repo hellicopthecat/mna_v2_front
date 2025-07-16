@@ -50,7 +50,7 @@ export async function joinAction(
     const {accessToken, refreshToken} =
       (await response.json()) as IAuthResponseType;
     cookieStore.set(ACCESSTOKEN, accessToken, {
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "strict",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       maxAge: 60 * 60 * 24,
