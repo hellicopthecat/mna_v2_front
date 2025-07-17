@@ -7,8 +7,9 @@ import {IIncomeExpend} from "@/types/asset/assetType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {useState} from "react";
 import EditInEx from "./editInEx/EditInEx";
-import DeleteInEx from "./editInEx/DeleteInEx";
 import EditBtn from "../btnComp/EditBtn";
+import DeleteBtn from "../btnComp/DeleteBtn";
+import deleteInExActions from "@/app/(after-login)/company/[companyId]/[assetId]/totalInEx/_deleteInEx/actions";
 
 export default function TotalInEx({
   data,
@@ -68,7 +69,7 @@ export default function TotalInEx({
             {isManager && (
               <div className="flex gap-3 *:w-full *:transition-all *:ease-in-out *:duration-300 *:p-2 *:rounded-md *:cursor-pointer">
                 <EditBtn id={value.id} fn={setModal} />
-                <DeleteInEx id={value.id} />
+                <DeleteBtn id={value.id} fn={deleteInExActions} />
               </div>
             )}
             {modal === value.id && isManager && (

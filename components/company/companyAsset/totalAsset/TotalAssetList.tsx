@@ -6,6 +6,8 @@ import {IResponseErrorType} from "@/types/response/responseType";
 import {useState} from "react";
 import EditBtn from "../btnComp/EditBtn";
 import EditAsset from "./editAsset/EditAsset";
+import DeleteBtn from "../btnComp/DeleteBtn";
+import deleteAssetsAction from "@/app/(after-login)/company/[companyId]/[assetId]/totalAsset/_deleteAsset/actions";
 
 export default function TotalAssetList({
   data,
@@ -72,10 +74,14 @@ export default function TotalAssetList({
             {isManager && (
               <div className="flex gap-2 *:w-full *:cursor-pointer *:p-2 *:rounded-md">
                 <EditBtn id={value.id} fn={setModal} />
-                <button>삭제</button>
+                <DeleteBtn id={value.id} fn={deleteAssetsAction} />
               </div>
             )}
-            {modal === value.id && isManager && <EditAsset goBack={setModal} />}
+            {modal === value.id && isManager && (
+              <div>
+                <EditAsset data={value} goBack={setModal} />
+              </div>
+            )}
           </li>
         ))
       )}
