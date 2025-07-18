@@ -25,7 +25,7 @@ const getTotalAssets = async (assetId: string) => {
   return data as IAssetLiability[];
 };
 
-const checkManager = async (id: string) => {
+const isAmImanager = async (id: string) => {
   const cookie = await cookies();
   const response = await fetch(
     `http://localhost:4000/company-manager/isManager/${id}`,
@@ -45,7 +45,7 @@ export default async function Page({
 }) {
   const {companyId, assetId} = await params;
   const data = await getTotalAssets(assetId);
-  const isManager = await checkManager(companyId);
+  const isManager = await isAmImanager(companyId);
 
   return (
     <ListLayout goBack={`/company/${companyId}/${assetId}`}>

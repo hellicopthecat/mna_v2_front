@@ -24,6 +24,23 @@ const getCompanyProducts = async (companyId: string) => {
   }
   return data as IProductTypes[];
 };
+
+const isAmImanager = async (companyId: string) => {
+  const cookie = await cookies();
+  const response = await fetch(
+    `http://localhost:4000/company-manager/isManager/${companyId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data as boolean;
+};
+
 export default async function Page({
   params,
 }: {
@@ -31,6 +48,7 @@ export default async function Page({
 }) {
   const {companyId} = await params;
   const data = await getCompanyProducts(companyId);
+  const manager = await isAmImanager(companyId);
   return (
     <ListLayout goBack={`/company/${companyId}`}>
       <ToGoBtn
@@ -38,7 +56,7 @@ export default async function Page({
         txt="상품생성"
       />
       <ul className="flex flex-col gap-2">
-        <ProductCard data={data} />
+        <ProductCard data={data} isManager={manager} />
       </ul>
     </ListLayout>
   );
