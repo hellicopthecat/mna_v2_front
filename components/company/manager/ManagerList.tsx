@@ -23,7 +23,10 @@ export default function ManagerList({
             ) : (
               <div className="size-16 rounded-full bg-green-600" />
             )}
-            <span>{manage.userName}</span>
+            <div className="flex flex-col gap-1 items-center">
+              <span>{manage.userName}</span>
+              <small>{manage.email}</small>
+            </div>
           </li>
         ))
       )}

@@ -1,7 +1,7 @@
 "use client";
 
 import {useActionState, useEffect, useState} from "react";
-import createCompany from "./actions";
+import createCompany from "../../../../app/(after-login)/my-page/create-company/actions";
 import InputLayout from "@/components/layout/formLayout/inputLayout";
 import {
   intitKakaoAddress,

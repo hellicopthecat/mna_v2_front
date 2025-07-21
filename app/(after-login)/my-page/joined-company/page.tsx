@@ -5,9 +5,9 @@ import {ICompanyTypes} from "@/types/company/companyType";
 import {IResponseErrorType} from "@/types/response/responseType";
 import {cookies} from "next/headers";
 
-const companyData = async () => {
+const joinedCompany = async () => {
   const cookie = await cookies();
-  const response = await fetch(`http://localhost:4000/auth/myCompany`, {
+  const response = await fetch("http://localhost:4000/company/joined", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -20,13 +20,13 @@ const companyData = async () => {
   }
   return data as ICompanyTypes[];
 };
+
 export default async function Page() {
-  const myCompany = await companyData();
+  const company = await joinedCompany();
+
   return (
     <ListLayout goBack="/my-page">
-      <ul className="grid grid-cols-1 gap-3 xl:mx-auto w-full">
-        <CompanyListLayout company={myCompany} />
-      </ul>
+      <CompanyListLayout company={company} />
     </ListLayout>
   );
 }

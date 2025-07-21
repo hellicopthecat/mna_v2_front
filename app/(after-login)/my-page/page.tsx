@@ -54,13 +54,19 @@ export default async function Page() {
             <span>{user.email}</span>
           </p>
         </div>
-        <Link
-          href={`/my-page/my-company`}
-          className="bg-blue-500 p-2 rounded-md self-center"
-        >
-          보유 회사 보기
-        </Link>
       </div>
+      <Link
+        href={`/my-page/my-company`}
+        className="bg-blue-500 p-2 rounded-md self-center"
+      >
+        보유 회사 보기 ({user.ownedCompany.length})
+      </Link>
+      <Link
+        href={`/my-page/joined-company`}
+        className="bg-blue-500 p-2 rounded-md self-center"
+      >
+        직원으로 등록된 회사 보기 ({user.workAtCompany.length})
+      </Link>
     </div>
   );
 }
