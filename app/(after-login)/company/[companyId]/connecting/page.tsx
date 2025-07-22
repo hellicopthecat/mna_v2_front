@@ -34,7 +34,7 @@ export default async function Page({
   const data = await getConnectingCompany(companyId);
   return (
     <ListLayout goBack={`/company/${companyId}`}>
-      <ul>
+      <ul className="flex flex-col gap-2">
         {isError(data) ? (
           <li>
             <p>{data.message}</p>

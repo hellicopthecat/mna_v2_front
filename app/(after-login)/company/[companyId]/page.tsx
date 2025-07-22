@@ -3,6 +3,7 @@ import {ACCESSTOKEN} from "@/constants/constant";
 import {ICompanyTypes} from "@/types/company/companyType";
 import {IUserTypes} from "@/types/user/userType";
 import {cookies} from "next/headers";
+import Link from "next/link";
 
 const getMyCompany = async (companyId: string) => {
   const cookie = await cookies();
@@ -27,6 +28,22 @@ const getMyId = async () => {
   });
   return await user.json();
 };
+const isOwner = async (companyId: string) => {
+  const cookie = await cookies();
+  const response = await fetch(
+    `http://localhost:4000/company-manager/isOwner/${companyId}`,
+    {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${cookie.get(ACCESSTOKEN)?.value}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    return false;
+  }
+  return await response.json();
+};
 
 export default async function Page({
   params,
@@ -36,8 +53,10 @@ export default async function Page({
   const {companyId} = await params;
   const data: ICompanyTypes = await getMyCompany(companyId);
   const user: IUserTypes = await getMyId();
+  const owner = await isOwner(companyId);
+
   return (
-    <section className="flex flex-col gap-5 w-full">
+    <section className="flex flex-col gap-5 w-full h-full">
       <div className="flex justify-between">
         <div>
           <h2 className="font-bold text-3xl">{data.companyName}</h2>
@@ -122,6 +141,14 @@ export default async function Page({
           />
         </div>
       </div>
+      {owner && (
+        <Link
+          className="self-end text-red-700 border-red-800 border p-2 rounded-md hover:text-red-500 hover:border-red-500 transition-all ease-in-out duration-200"
+          href={`/company/${companyId}/deleteCompany`}
+        >
+          회사삭제
+        </Link>
+      )}
     </section>
   );
 }
