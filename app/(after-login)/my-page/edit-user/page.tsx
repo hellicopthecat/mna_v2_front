@@ -1,5 +1,5 @@
-import MyPageUserInfo from "@/components/myPage/MyPageUserInfo";
-import MyPageNav from "@/components/myPage/navigation/MyPageNav";
+import GoBackBtn from "@/components/layout/navigation/GoBackBtn";
+import EditUserForm from "@/components/myPage/editUser/EditUserForm";
 import {ACCESSTOKEN} from "@/constants/constant";
 import {isError} from "@/libs/utils/util";
 import {IResponseErrorType} from "@/types/response/responseType";
@@ -25,13 +25,13 @@ const userData = async () => {
 export default async function Page() {
   const user = await userData();
   return (
-    <div className="flex flex-col gap-5 w-full">
+    <div className="flex flex-col gap-3">
       {isError(user) ? (
-        <p>회원을 불러오는데 실패하였습니다.</p>
+        <p>회원데이터를 불러오는데 실패했습니다.</p>
       ) : (
         <>
-          <MyPageNav />
-          <MyPageUserInfo user={user} />
+          <GoBackBtn href="/my-page" />
+          <EditUserForm data={user} />
         </>
       )}
     </div>

@@ -35,10 +35,14 @@ export default async function Page({
     <ListLayout goBack={`/company/${companyId}`}>
       <ToGoBtn
         linkTxt={`/company/${companyId}/workers/findWorker`}
-        txt="사원찾기"
+        txt="사원등록"
       />
       <ul className="flex flex-col gap-2">
-        {isError(data) ? <li>{data.message}</li> : <WorkerList data={data} />}
+        {isError(data) ? (
+          <li>{data.message}</li>
+        ) : (
+          <WorkerList data={data} companyId={companyId} />
+        )}
       </ul>
     </ListLayout>
   );

@@ -12,6 +12,7 @@ export interface IUserTypes {
   lastName: string;
   phone: string;
   avatarUrl: string;
+  password: string;
   ownedCompany: ICompanyTypes[];
   managedCompany: ICompanyTypes[];
   workAtCompany: ICompanyTypes[];

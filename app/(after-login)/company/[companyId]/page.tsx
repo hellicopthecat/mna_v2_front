@@ -98,32 +98,32 @@ export default async function Page({
       <div className="flex flex-col gap-3">
         {/* 인사정보 */}
         <h2 className="font-bold text-2xl">인사정보</h2>
-        <ToGoBtn
-          linkTxt={`/company/${companyId}/manager`}
-          txt={`회계담당자보기 (${data.companyManager.length})`}
-        />
-        <ToGoBtn
-          linkTxt={`/company/${companyId}/workers`}
-          txt={`직원 (${data.companyWorker.length})`}
-        />
 
         {data.companyManager.find((manager) => manager.id === user.id) && (
-          <ToGoBtn
-            linkTxt={`/company/${companyId}/workersVacations`}
-            txt={`직원휴가보기`}
-          />
+          <>
+            <ToGoBtn
+              linkTxt={`/company/${companyId}/manager`}
+              txt={`회계담당자보기 (${data.companyManager.length})`}
+            />
+            <ToGoBtn
+              linkTxt={`/company/${companyId}/workers`}
+              txt={`직원 (${data.companyWorker.length})`}
+            />
+            <ToGoBtn
+              linkTxt={`/company/${companyId}/workersVacations`}
+              txt={`직원휴가보기`}
+            />
+            <ToGoBtn
+              linkTxt={`/company/${companyId}/workersSalary`}
+              txt={`직원급여보기`}
+            />
+          </>
         )}
+
         <ToGoBtn
           linkTxt={`/company/${companyId}/myVacation`}
           txt={`휴가보기`}
         />
-
-        {data.companyManager.find((manager) => manager.id === user.id) && (
-          <ToGoBtn
-            linkTxt={`/company/${companyId}/workersSalary`}
-            txt={`직원급여보기`}
-          />
-        )}
         <ToGoBtn linkTxt={`/company/${companyId}/mySalary`} txt={`급여보기`} />
       </div>
 
